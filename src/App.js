@@ -14,7 +14,10 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => setBlogs(blogs))
+    /*
+    sort the blogs with custom function
+    */
   }, []);
 
   useEffect(() => {
@@ -56,8 +59,8 @@ const App = () => {
     window.localStorage.removeItem("loggedInUser");
   };
 
-    const hideWhenVisible = { display: addBlogFormVisible ? "none" : "" };
-    const showWhenVisible = { display: addBlogFormVisible ? "" : "none" };
+  const hideWhenVisible = { display: addBlogFormVisible ? "none" : "" };
+  const showWhenVisible = { display: addBlogFormVisible ? "" : "none" };
 
   if (user === null) {
     return (
