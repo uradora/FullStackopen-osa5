@@ -3,13 +3,12 @@ import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Notification from "./components/Notification";
+import AddBlogForm from "./components/AddBlogForm";
 
 const App = () => {
+  const [addBlogFormVisible, setAddBlogFormVisible] = useState(false);
   const [blogs, setBlogs] = useState([]);
-  const [title, setTitle] = useState("");
   const [message, setMessage] = useState(null);
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -43,10 +42,10 @@ const App = () => {
     } catch (exception) {
       console.log(exception);
       setMessage("wrong credentials");
-      console.log(message)
+      console.log(message);
       setTimeout(() => {
-        console.log(message)
-        console.log("wtf")
+        console.log(message);
+        console.log("wtf");
         setMessage(null);
       }, 5000);
     }
@@ -57,31 +56,16 @@ const App = () => {
     window.localStorage.removeItem("loggedInUser");
   };
 
-  const addBlog = async (event) => {
-    event.preventDefault();
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url,
-    };
-
-    const returnedBlog = await blogService.create(blogObject);
-
-    setBlogs(blogs.concat(returnedBlog));
-    setMessage(`a new blog ${title} by ${author} added`);
-    setTimeout(() => {
-      setMessage(null);
-    }, 5000);
-    setTitle("");
-    setAuthor("");
-    setUrl("");
-  };
+    const hideWhenVisible = { display: addBlogFormVisible ? "none" : "" };
+    const showWhenVisible = { display: addBlogFormVisible ? "" : "none" };
 
   if (user === null) {
     return (
       <div>
         <h2>Log in to application</h2>
-        <p><Notification message={message} /></p>
+        <p>
+          <Notification message={message} />
+        </p>
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -117,37 +101,17 @@ const App = () => {
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
-      <h2>create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          title
-          <input
-            type="text"
-            value={title}
-            name="Title"
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author
-          <input
-            type="text"
-            value={author}
-            name="Author"
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url
-          <input
-            type="text"
-            value={url}
-            name="Url"
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">save</button>
-      </form>
+      <div style={hideWhenVisible}>
+        <button onClick={() => setAddBlogFormVisible(true)}>new blog</button>
+      </div>
+      <div style={showWhenVisible}>
+        <AddBlogForm
+          setMessage={setMessage}
+          setBlogs={setBlogs}
+          blogs={blogs}
+          setAddBlogFormVisible={setAddBlogFormVisible}
+        />
+      </div>
     </div>
   );
 };
