@@ -14,7 +14,7 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    blogService.getAll().then((blogs) => setBlogs(blogs));
     /*
     sort the blogs with custom function
     */
@@ -25,6 +25,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
+      blogService.setToken(user.token);
     }
   }, []);
 
@@ -43,18 +44,14 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      console.log(exception);
       setMessage("wrong credentials");
-      console.log(message);
       setTimeout(() => {
-        console.log(message);
-        console.log("wtf");
         setMessage(null);
       }, 5000);
     }
   };
 
-  const handleLogout = (event) => {
+  const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("loggedInUser");
   };
@@ -102,7 +99,13 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
       </p>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          blogs={blogs}
+          setBlogs={setBlogs}
+          user={user}
+        />
       ))}
       <div style={hideWhenVisible}>
         <button onClick={() => setAddBlogFormVisible(true)}>new blog</button>

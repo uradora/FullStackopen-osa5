@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, blogs, setBlogs }) => {
+const Blog = ({ blog, blogs, setBlogs, user }) => {
   const [showAll, setShowAll] = useState(false);
 
   const blogStyle = {
@@ -16,8 +16,7 @@ const Blog = ({ blog, blogs, setBlogs }) => {
   };
 
   const addLike = async () => {
-
-    const idToUpdate = blog.id
+    const idToUpdate = blog.id;
 
     const blogObject = {
       title: blog.title,
@@ -28,10 +27,26 @@ const Blog = ({ blog, blogs, setBlogs }) => {
 
     const returnedBlog = await blogService.update(idToUpdate, blogObject);
 
-    setBlogs(blogs.map((blog) => 
-    blog.id !== idToUpdate ? blog : returnedBlog))
-
+    setBlogs(
+      blogs.map((blog) => (blog.id !== idToUpdate ? blog : returnedBlog))
+    );
   };
+
+  const removeBlog = async () => {
+    const idToRemove = blog.id;
+
+    if (window.confirm(`Remove blog ${blog.name} by ${blog.author}?`)) {
+      await blogService.remove(idToRemove);
+      setBlogs(blogs.filter((b) => b.id !== idToRemove));
+    }
+  };
+
+  const removeButtonVisible = {
+    display: blog.user && blog.user.username === user.username ? "" : "none",
+  };
+
+  //only after refresh, this correctly identifies recently added blog's blog.user.username
+  //gottaFindUserbyId i guess if I want to fix this
 
   if (showAll) {
     return (
@@ -46,6 +61,10 @@ const Blog = ({ blog, blogs, setBlogs }) => {
           <button onClick={() => addLike()}>like</button>
           <br />
           {blog.author}
+          <br />
+          <div style={removeButtonVisible}>
+            <button onClick={() => removeBlog()}>remove</button>
+          </div>
         </div>
       </div>
     );
