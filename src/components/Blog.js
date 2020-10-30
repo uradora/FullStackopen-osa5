@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, blogs, setBlogs, user }) => {
+const Blog = ({ blog, blogs, setBlogs, user, addLike }) => {
   const [showAll, setShowAll] = useState(false);
 
   const blogStyle = {
@@ -15,6 +15,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
     width: "fit-content",
   };
 
+  /*
   const addLike = async () => {
     const idToUpdate = blog.id;
 
@@ -31,6 +32,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
       blogs.map((blog) => (blog.id !== idToUpdate ? blog : returnedBlog))
     );
   };
+  */
 
   const removeBlog = async () => {
     const idToRemove = blog.id;
@@ -50,7 +52,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
 
   if (showAll) {
     return (
-      <div style={blogStyle} className="blogAllInfo">
+      <div style={blogStyle}>
         <div>
           {blog.title} {blog.author}
           <button onClick={() => setShowAll(false)}>hide</button>
@@ -58,7 +60,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
           {blog.url}
           <br />
           likes {blog.likes}
-          <button onClick={() => addLike()}>like</button>
+          <button onClick={() => addLike(blog)}>like</button>
           <br />
           {blog.author}
           <br />
@@ -72,7 +74,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
     );
   } else {
     return (
-      <div style={blogStyle} className="blogSomeInfo">
+      <div style={blogStyle}>
         <div>
           {blog.title} {blog.author}
           <button onClick={() => setShowAll(true)}>view</button>

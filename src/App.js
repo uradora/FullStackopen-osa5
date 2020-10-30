@@ -56,6 +56,23 @@ const App = () => {
     window.localStorage.removeItem("loggedInUser");
   };
 
+  const addLike = async (blog) => {
+    const idToUpdate = blog.id;
+
+    const blogObject = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+    };
+
+    const returnedBlog = await blogService.update(idToUpdate, blogObject);
+
+    setBlogs(
+      blogs.map((blog) => (blog.id !== idToUpdate ? blog : returnedBlog))
+    );
+  };
+
   const hideWhenVisible = { display: addBlogFormVisible ? "none" : "" };
   const showWhenVisible = { display: addBlogFormVisible ? "" : "none" };
 
@@ -105,6 +122,7 @@ const App = () => {
           blogs={blogs}
           setBlogs={setBlogs}
           user={user}
+          addLike={addLike}
         />
       ))}
       <div style={hideWhenVisible}>
