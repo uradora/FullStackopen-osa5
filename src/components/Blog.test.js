@@ -49,7 +49,6 @@ describe("blog component", () => {
     const button = component.getByText("like");
     fireEvent.click(button);
     fireEvent.click(button);
-    console.log(mockHandler.mock.calls)
     expect(mockHandler.mock.calls).toHaveLength(2);
   });
 });

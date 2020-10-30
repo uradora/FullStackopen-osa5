@@ -1,75 +1,69 @@
 import React, { useState } from "react";
-import blogService from "../services/blogs";
 import PropTypes from "prop-types";
 
-const AddBlogForm = ({
-  setMessage,
-  setBlogs,
-  blogs,
-  setAddBlogFormVisible,
-}) => {
+const AddBlogForm = ({ addBlog }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  const addBlog = async (event) => {
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
+
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value);
+  };
+
+  const handleUrlChange = (event) => {
+    setUrl(event.target.value);
+  };
+
+  const createBlog = async (event) => {
     event.preventDefault();
     const blogObject = {
       title: title,
       author: author,
       url: url,
     };
+    addBlog(blogObject);
 
-    const returnedBlog = await blogService.create(blogObject);
-
-    //doesn't set error message
-    try {
-      setBlogs(blogs.concat(returnedBlog));
-      setMessage(`a new blog ${title} by ${author} added`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-      setTitle("");
-      setAuthor("");
-      setUrl("");
-      setAddBlogFormVisible(false);
-    } catch (exception) {
-      setMessage("blog form invalid");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-    }
+    setTitle("");
+    setAuthor("");
+    setUrl("");
   };
 
   return (
     <div>
       <h2>create new</h2>
-      <form onSubmit={addBlog}>
+      <form onSubmit={createBlog} id="form">
         <div>
           title
           <input
+            id="title"
             type="text"
             value={title}
             name="Title"
-            onChange={({ target }) => setTitle(target.value)}
+            onChange={handleTitleChange}
           />
         </div>
         <div>
           author
           <input
+            id="author"
             type="text"
             value={author}
             name="Author"
-            onChange={({ target }) => setAuthor(target.value)}
+            onChange={handleAuthorChange}
           />
         </div>
         <div>
           url
           <input
+            id="url"
             type="text"
             value={url}
             name="Url"
-            onChange={({ target }) => setUrl(target.value)}
+            onChange={handleUrlChange}
           />
         </div>
         <button type="submit">save</button>
@@ -79,10 +73,7 @@ const AddBlogForm = ({
 };
 
 AddBlogForm.propTypes = {
-  setMessage: PropTypes.func.isRequired,
-  setBlogs: PropTypes.func.isRequired,
-  blogs: PropTypes.array.isRequired,
-  setAddBlogFormVisible: PropTypes.func.isRequired,
+  addBlog: PropTypes.func.isRequired,
 };
 
 export default AddBlogForm;

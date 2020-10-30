@@ -73,6 +73,26 @@ const App = () => {
     );
   };
 
+  const addBlog = (blogObject) => {
+
+    blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+        setAddBlogFormVisible(false);
+      })
+      .catch (exception => {
+        setMessage("blog form invalid");
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      })
+    }
+
   const hideWhenVisible = { display: addBlogFormVisible ? "none" : "" };
   const showWhenVisible = { display: addBlogFormVisible ? "" : "none" };
 
@@ -130,10 +150,7 @@ const App = () => {
       </div>
       <div style={showWhenVisible}>
         <AddBlogForm
-          setMessage={setMessage}
-          setBlogs={setBlogs}
-          blogs={blogs}
-          setAddBlogFormVisible={setAddBlogFormVisible}
+          addBlog={addBlog}
         />
       </div>
     </div>
