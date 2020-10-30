@@ -50,7 +50,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
 
   if (showAll) {
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className="blogAllInfo">
         <div>
           {blog.title} {blog.author}
           <button onClick={() => setShowAll(false)}>hide</button>
@@ -62,6 +62,8 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
           <br />
           {blog.author}
           <br />
+          {blog.url}
+          <br />
           <div style={removeButtonVisible}>
             <button onClick={() => removeBlog()}>remove</button>
           </div>
@@ -70,7 +72,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
     );
   } else {
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className="blogSomeInfo">
         <div>
           {blog.title} {blog.author}
           <button onClick={() => setShowAll(true)}>view</button>
